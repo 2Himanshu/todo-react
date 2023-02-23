@@ -2,12 +2,7 @@ import React, { useEffect } from "react";
 import "../App.css";
 import { useState } from "react";
 import { app, database, upload } from "../firebaseConfig";
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  onAuthStateChanged,
-} from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { collection, addDoc, getDoc, doc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
@@ -15,14 +10,12 @@ import {
   TextField,
   Button,
   Typography,
-  Link,
   Box,
   Card,
   Grid,
   Avatar,
 } from "@material-ui/core";
-import { IconButton } from "@material-ui/core";
-import { Visibility, VisibilityOff } from "@material-ui/icons";
+
 import userDataService from "../Service/firebaseService";
 function UserProfile() {
   const navigate = useNavigate();
@@ -52,32 +45,6 @@ function UserProfile() {
     }
   };
 
-  const handleSubmit = () => {
-    createUserWithEmailAndPassword(auth, data.email, data.password)
-      .then((res) => {
-        console.log(res.user);
-
-        const user = auth.currentUser;
-
-        const dbInstance = collection(database, "users");
-
-        addDoc(dbInstance, {
-          name: data.name,
-          contact: data.contact,
-          email: data.email,
-        })
-          .then(() => {
-            alert("Data Sent");
-          })
-          .catch((err) => {
-            alert(err.message);
-          });
-      })
-      .catch((err) => {
-        alert(err.message);
-      });
-  };
-
   const getUsers = async () => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -94,17 +61,6 @@ function UserProfile() {
         });
       }
     });
-  };
-
-  const handleSignIn = () => {
-    signInWithEmailAndPassword(auth, data.email, data.password)
-      .then((res) => {
-        console.log(res.user);
-        toast.success("Login SuccessFul");
-      })
-      .catch((err) => {
-        alert(err.message);
-      });
   };
 
   const handleClick = () => {
@@ -177,13 +133,14 @@ function UserProfile() {
             variant="h4"
             style={{ marginTop: "3%", fontSize: "22px" }}
           >
-            Name: {users.name}
+            <span style={{ fontWeight: "bold" }}> Name:</span> {users.name}
           </Typography>
           <Typography
             variant="h4"
             style={{ marginTop: "3%", fontSize: "22px" }}
           >
-            Contact: {users.contact}
+            <span style={{ fontWeight: "bold" }}> Contact:</span>{" "}
+            {users.contact}
           </Typography>
           <TextField
             required
@@ -198,7 +155,7 @@ function UserProfile() {
           />
         </Box>
 
-        <Box display="flex" flexDirection="row" style={{ marginTop: "2%" }}>
+        <Box display="flex" flexDirection="row" style={{ marginTop: "%" }}>
           <Button
             variant="outlined"
             style={{ marginTop: "3%", marginLeft: "35%" }}

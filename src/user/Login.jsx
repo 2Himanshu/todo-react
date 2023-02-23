@@ -83,8 +83,9 @@ function Login() {
           toast.error("Please Correct Password");
         } else if (err.code == "auth/user-not-found") {
           toast.error("User Not Found");
+        } else {
+          alert(err);
         }
-        alert(err);
       });
   };
 
@@ -168,7 +169,10 @@ function Login() {
             style={{ marginTop: "3%", textAlign: "left" }}
           >
             {" "}
-            <Link onClick={() => navigate("/forget-password")}>
+            <Link
+              onClick={() => navigate("/forget-password")}
+              style={{ cursor: "pointer" }}
+            >
               Forget Password?
             </Link>
           </Typography>
@@ -192,7 +196,13 @@ function Login() {
           Sign In
         </Button>
         <Typography variant="subtitle1" style={{ marginTop: "3%" }}>
-          Not a User? <Link onClick={() => navigate("/register")}>Sign UP</Link>
+          Not a User?{" "}
+          <Link
+            onClick={() => navigate("/register")}
+            style={{ cursor: "pointer" }}
+          >
+            Sign UP
+          </Link>
         </Typography>
       </Card>
     </Box>
