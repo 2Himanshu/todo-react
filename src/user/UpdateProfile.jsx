@@ -8,7 +8,7 @@ import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
 } from "firebase/auth";
-import { collection, addDoc, getDoc, doc } from "firebase/firestore";
+import { collection, addDoc, getDoc, doc, updateDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import {
@@ -51,31 +51,7 @@ function UpdateProfile() {
     }
   };
 
-  const handleSubmit = () => {
-    createUserWithEmailAndPassword(auth, data.email, data.password)
-      .then((res) => {
-        console.log(res.user);
-
-        const user = auth.currentUser;
-
-        const dbInstance = collection(database, "users");
-
-        addDoc(dbInstance, {
-          name: data.name,
-          contact: data.contact,
-          email: data.email,
-        })
-          .then(() => {
-            alert("Data Sent");
-          })
-          .catch((err) => {
-            alert(err.message);
-          });
-      })
-      .catch((err) => {
-        alert(err.message);
-      });
-  };
+ 
 
   const getUsers = async () => {
     onAuthStateChanged(auth, (user) => {
@@ -94,16 +70,7 @@ function UpdateProfile() {
     });
   };
 
-  const handleSignIn = () => {
-    signInWithEmailAndPassword(auth, data.email, data.password)
-      .then((res) => {
-        console.log(res.user);
-        toast.success("Login SuccessFul");
-      })
-      .catch((err) => {
-        alert(err.message);
-      });
-  };
+
 
   const handleClick = () => {
     upload(photo, auth.currentUser, setLoading);
@@ -113,7 +80,10 @@ function UpdateProfile() {
     setTimeout(() => {
       if (auth.currentUser?.photoURL) {
         setPhotoURL(auth.currentUser.photoURL);
-
+        const dbInstance = collection(database, "users");
+        const userDoc = doc(dbInstance, auth.currentUser.uid);
+        const updatedImg = { imgUrl: auth.currentUser.photoURL};
+        updateDoc(userDoc,updatedImg)
         getUsers();
       }
     }, 1500);

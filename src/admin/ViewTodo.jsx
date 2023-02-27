@@ -1,4 +1,4 @@
-import { collection, getDocs } from "firebase/firestore";
+import { collection, doc, getDocs,getDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { database } from "../firebaseConfig";
@@ -22,16 +22,26 @@ import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { getAuth } from "firebase/auth";
 const ViewTodo = () => {
   const dbInstance = collection(database, "TodoList");
+  const dbInstanceUsers = collection(database, "users");
   const [todo, setTodo] = useState([]);
+  const [users, setUsers] = useState([]);
   const navigate = useNavigate();
+  const auth = getAuth()
 
   useEffect(() => {
     const getTodo = async () => {
       const data = await getDocs(dbInstance);
       setTodo(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     };
+    const getUsers = async () => {
+      const data = await getDocs(dbInstanceUsers);
+      setUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    };
     getTodo();
+    getUsers();
   }, []);
+
+
 
   const CustomTableCell = withStyles((theme) => ({
     head: {
@@ -59,6 +69,8 @@ const ViewTodo = () => {
     },
   });
 
+
+  
   return (
     // <div>
     //   <h1>All Todos</h1>
@@ -82,6 +94,8 @@ const ViewTodo = () => {
     // </table>
     //       <button onClick={()=>navigate('/admin-dashboard')}>View Users</button>
     // </div>
+
+    
 
     <Box
       display="flex"
@@ -109,13 +123,19 @@ const ViewTodo = () => {
             <TableHead>
               <TableRow>
                 <CustomTableCell style={{ color: "white" }} align="center">
+                  ID
+                </CustomTableCell>
+                <CustomTableCell style={{ color: "white" }} align="center">
+                  Task
+                </CustomTableCell>
+                <CustomTableCell style={{ color: "white" }} align="center">
                   Name
                 </CustomTableCell>
                 <CustomTableCell style={{ color: "white" }} align="center">
-                  Email
+                  Contact
                 </CustomTableCell>
                 <CustomTableCell style={{ color: "white" }} align="center">
-                  Contact
+                  Status
                 </CustomTableCell>
               </TableRow>
             </TableHead>
@@ -132,9 +152,30 @@ const ViewTodo = () => {
                       {user.task}
                     </CustomTableCell>
                     <CustomTableCell align="center">
-                      {user.isCompleted ? "completed" : "pending"}
+                    {
+                        users.map((ust)=>{
+                          return (
+                            ust.userId===user.userId ? ust.name : ""
+                          );
+                        })
+                      }
                     </CustomTableCell>
 
+                    <CustomTableCell align="center">
+                    {
+                        users.map((ust)=>{
+                          return (
+                            ust.userId===user.userId ? ust.contact : ""
+                          );
+                        })
+                      }
+                    </CustomTableCell>
+
+                    <CustomTableCell align="center">
+                      {user.isCompleted ? <span style={{color: "green"}} >Completed</span>  : <span style={{color: "red"}} >Pending</span>}
+                    </CustomTableCell>
+
+                   
                     {/* <CustomTableCell align="right">{row.protein}</CustomTableCell> */}
                   </TableRow>
                 );

@@ -97,17 +97,7 @@ function Login() {
   console.log(data);
 
   return (
-    // <div className="App-header">
-    //   <h1>Login</h1>
-    //   <input className='input-fields' onChange={(event)=>handleInputs(event)} name='email' type={'text'} placeholder="Enter your email" />
-    //   <input className='input-fields' onChange={(event)=>handleInputs(event)} name='password' type={'password'} placeholder="Enter your password" />
-    //   {/* <button onClick={handleSubmit}>Sign Up</button> */}
-    //   <button onClick={handleSignIn}>Sign In</button>
-    //   <button onClick={()=>navigate('/admin-login')}>Admin Login</button>
-    //   <p>Not a User? <span onClick={()=>navigate('/register')} ><a href="">Sign Up</a></span></p>
-    //   <p>Forget password? <span onClick={()=>navigate('/forget-password')} ><a href="">Click Here</a></span></p>
-    //   {/* <button onClick={()=>navigate('/register')}>Sign Up</button> */}
-    // </div>
+   
 
     <Box
       display="flex"

@@ -75,17 +75,8 @@ function Register() {
       .then((res) => {
         console.log(res.user);
 
-        // add user data to firestore
-        // setDoc(doc(database, "users", auth.currentUser.uid), {
-        //   name: data.name,
-        //   contact: data.contact,
-        //   email: data.email,
-        // }).then(() => {
-        //   toast.success("User successfully registered");
-        // }).catch((err) => {
-        //   alert(err.message);
-        // });
-        UserDataService.addUser(data.name, data.contact, data.email)
+       
+        UserDataService.addUser(data.name, data.contact, data.email,auth.currentUser.uid)
           .then(() => {
             toast.success("User successfully registered");
           })

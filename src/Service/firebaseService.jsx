@@ -1,4 +1,6 @@
 import { database } from "../firebaseConfig";
+import { useState } from "react";
+
 import {
   collection,
   getDocs,
@@ -12,15 +14,22 @@ import {
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { toast } from "react-hot-toast";
 
-const userCollection = collection(database, "Users-Info");
 const auth = getAuth();
+let photoURL = "https://static.vecteezy.com/system/resources/thumbnails/007/033/146/small/profile-icon-login-head-icon-vector.jpg"
+
+
+// if(auth.currentUser.photoURL){
+//   photoURL = auth.currentUser.photoURL;
+// }
 
 class userDataService {
-  addUser = async (dataName, dataContact, dataEmail) => {
+  addUser = async (dataName, dataContact, dataEmail,dataId) => {
     return setDoc(doc(database, "users", auth.currentUser.uid), {
       name: dataName,
       contact: dataContact,
       email: dataEmail,
+      userId: dataId,
+      imgUrl: photoURL
     });
   };
 
@@ -48,8 +57,10 @@ class todoDataService {
       return;
     }
     const increaseage = { task: data.task, isCompleted: completed };
+    // const updatedImg = { imgUrl: auth.currentUser.photoURL};
     // console.log(id)
     updateDoc(todoDoc, increaseage)
+    // updateDoc(userDoc,updatedImg)
       .then(() => {
         toast.success("Upadted SuccessFully");
       })

@@ -64,28 +64,7 @@ function Home() {
     setData({ ...data, ...inputs });
   };
 
-  const handleSubmit = () => {
-    createUserWithEmailAndPassword(auth, data.email, data.password)
-      .then((res) => {
-        console.log(res.user);
 
-        const user = auth.currentUser;
-
-        addDoc(dbInstance, {
-          id: data.id,
-          task: data.task,
-        })
-          .then(() => {
-            alert("Data Sent");
-          })
-          .catch((err) => {
-            alert(err.message);
-          });
-      })
-      .catch((err) => {
-        alert(err.message);
-      });
-  };
 
   const CustomTableCell = withStyles((theme) => ({
     head: {
@@ -97,31 +76,9 @@ function Home() {
     },
   }))(TableCell);
 
-  const styles = (theme) => ({
-    root: {
-      width: "100%",
-      marginTop: theme.spacing.unit * 3,
-      overflowX: "auto",
-    },
-    table: {
-      minWidth: 700,
-    },
-    row: {
-      "&:nth-of-type(odd)": {
-        backgroundColor: theme.palette.background.default,
-      },
-    },
-  });
+ 
 
-  const handleSignIn = () => {
-    signInWithEmailAndPassword(auth, data.email, data.password)
-      .then((res) => {
-        console.log(res.user);
-      })
-      .catch((err) => {
-        alert(err.message);
-      });
-  };
+  
 
   // onAuthStateChanged(auth, (currentUser) => {
   //   getTodo()
@@ -150,18 +107,7 @@ function Home() {
   };
 
   const updateData = (id) => {
-    // const todoDoc = doc(dbInstance, id);
-    // if (data.task == "" || completed==null) {
-    //   toast.error("Please enter Data to Textfield")
-    //   return;
-    // }
-    // const increaseage = { task: data.task, isCompleted: completed };
-    // // console.log(id)
-    // updateDoc(todoDoc, increaseage).then(() => {
-    //   toast.success("Upadted SuccessFully")
-    // }).catch((err) => {
-    //   toast.error("Please enter Data to Textfield")
-    // })
+    
     todoDataService.updateTodo(id, data, completed);
     getTodo();
 
@@ -180,11 +126,6 @@ function Home() {
     });
   };
 
-  // getTodo();
-
-  // console.log(data)
-
-  // console.log(users)
 
   return (
     <>
@@ -250,7 +191,7 @@ function Home() {
                 onClick={() => setCompleted(true)}
                 value="true"
               />{" "}
-              <Typography variant="" style={{}}>
+              <Typography variant="" style={{color: "green"}}>
                 Completed
               </Typography>
               <input
@@ -259,8 +200,9 @@ function Home() {
                 name="task"
                 onClick={() => setCompleted(false)}
                 value="false"
+                
               />
-              <Typography variant="" style={{ marginRight: "10%" }}>
+              <Typography variant="" style={{ marginRight: "10%",color: "red" }}   >
                 Not Completed
               </Typography>{" "}
               <br />
@@ -342,7 +284,7 @@ function Home() {
                           {user.task}
                         </CustomTableCell>
                         <CustomTableCell align="center">
-                          {user.isCompleted ? "Completed" : "pending"}
+                          {user.isCompleted ? <span style={{color: "green"}} >Completed</span> :  <span style={{color: "red"}} >pending</span>}
                         </CustomTableCell>
                         <CustomTableCell align="center">
                           <Button
